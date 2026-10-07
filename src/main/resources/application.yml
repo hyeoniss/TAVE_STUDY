@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: todomate
+  profiles:
+    default: local
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  data:
+    # Redis 연결 정보는 환경변수로 변경할 수 있고, 없으면 로컬 Redis를 사용한다.
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  cache:
+    # Spring Cache의 저장소로 Redis를 사용한다.
+    type: redis
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
