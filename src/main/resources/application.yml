@@ -13,6 +13,9 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+      repositories:
+        # Redis는 Repository가 아니라 Spring Cache 저장소로만 사용한다.
+        enabled: false
   cache:
     # Spring Cache의 저장소로 Redis를 사용한다.
     type: redis

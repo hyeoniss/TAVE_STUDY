@@ -33,8 +33,8 @@ public class TodoService {
     // 같은 날짜와 페이지의 반복 조회를 DB 대신 Redis에서 반환하기 위해 캐싱한다.
     @Cacheable(
             cacheNames = "todoLists",
-            // 예: todoLists::2026-10-06:0:20
-            key = "T(java.lang.String).valueOf(#date) + ':' + #page + ':' + #size"
+            // 예: todoLists::all:0:20 또는 todoLists::2026-10-06:0:20
+            key = "(#date == null ? 'all' : #date.toString()) + ':' + #page + ':' + #size"
     )
     public PageResponse<TodoResponse> findAll(LocalDate date, int page, int size) {
         // 페이지 번호와 한 번에 조회할 데이터 수를 검증한다.

@@ -442,14 +442,14 @@ PageRequest.of(
 ```java
 @Cacheable(
     cacheNames = "todoLists",
-    key = "T(java.lang.String).valueOf(#date) + ':' + #page + ':' + #size"
+    key = "(#date == null ? 'all' : #date.toString()) + ':' + #page + ':' + #size"
 )
 ```
 
 캐시 키에는 조회 결과를 결정하는 모든 조건을 포함한다.
 
 ```text
-전체 첫 페이지: todoLists::null:0:20
+전체 첫 페이지: todoLists::all:0:20
 2026-10-06 첫 페이지: todoLists::2026-10-06:0:20
 2026-10-06 두 번째 페이지: todoLists::2026-10-06:1:20
 ```

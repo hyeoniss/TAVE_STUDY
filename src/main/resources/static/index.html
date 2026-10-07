@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todomate</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="app-shell">
+    <header class="app-header">
+        <div>
+            <p class="eyebrow">MY DAILY ROUTINE</p>
+            <h1>Todomate</h1>
+            <p class="subtitle">오늘 해야 할 일을 가볍게 기록해 보세요.</p>
+        </div>
+        <div id="healthBadge" class="health-badge health-checking">
+            <span class="health-dot"></span>
+            <span>서버 확인 중</span>
+        </div>
+    </header>
+
+    <section class="panel create-panel" aria-labelledby="createTitle">
+        <div class="section-heading">
+            <div>
+                <p class="section-label">NEW TODO</p>
+                <h2 id="createTitle">할 일 추가</h2>
+            </div>
+            <span id="todayLabel" class="today-label"></span>
+        </div>
+
+        <form id="todoForm" class="todo-form">
+            <label class="field field-title">
+                <span>제목</span>
+                <input id="title" name="title" type="text" maxlength="100"
+                       placeholder="예: 스프링 강의 듣기" required>
+            </label>
+            <label class="field field-memo">
+                <span>메모</span>
+                <input id="memo" name="memo" type="text" maxlength="500"
+                       placeholder="간단한 메모를 남겨보세요">
+            </label>
+            <label class="field field-date">
+                <span>날짜</span>
+                <input id="todoDate" name="todoDate" type="date" required>
+            </label>
+            <button class="primary-button" type="submit">추가하기</button>
+        </form>
+    </section>
+
+    <section class="panel list-panel" aria-labelledby="listTitle">
+        <div class="list-toolbar">
+            <div>
+                <p class="section-label">TODO LIST</p>
+                <h2 id="listTitle">할 일 목록</h2>
+            </div>
+            <div class="filters">
+                <label class="filter-field">
+                    <span class="sr-only">조회 날짜</span>
+                    <input id="filterDate" type="date">
+                </label>
+                <button id="todayButton" class="secondary-button" type="button">오늘</button>
+                <button id="allButton" class="text-button" type="button">전체</button>
+            </div>
+        </div>
+
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+        <div id="todoList" class="todo-list"></div>
+
+        <div class="pagination">
+            <button id="previousButton" class="page-button" type="button">이전</button>
+            <span id="pageLabel">1 / 1</span>
+            <button id="nextButton" class="page-button" type="button">다음</button>
+        </div>
+    </section>
+</main>
+
+<template id="todoTemplate">
+    <article class="todo-item">
+        <button class="complete-button" type="button" aria-label="완료 상태 변경">
+            <span></span>
+        </button>
+        <div class="todo-content">
+            <h3 class="todo-title"></h3>
+            <p class="todo-memo"></p>
+            <time class="todo-date"></time>
+        </div>
+        <div class="todo-actions">
+            <button class="edit-button icon-button" type="button">수정</button>
+            <button class="delete-button icon-button danger" type="button">삭제</button>
+        </div>
+    </article>
+</template>
+
+<script src="/app.js"></script>
+</body>
+</html>
