@@ -12,6 +12,34 @@ docker compose up -d redis
 
 실행 후 브라우저에서 `http://localhost:8080`에 접속하면 기본 투두 화면을 사용할 수 있습니다.
 
+`local` 프로파일에서는 페이지네이션 확인을 위해 테스트 투두 65개를 자동 생성합니다.
+자동 생성을 끄려면 `application-local.yml`의 `app.seed.enabled`를 `false`로 변경합니다.
+
+전체 Docker 환경은 다음 명령으로 실행합니다.
+
+```bash
+docker compose up -d --build --wait
+```
+
+5주차 Docker/AWS 배포와 성능 검증 자료:
+
+- [배포 가이드](docs/WEEK5_DEPLOYMENT.md)
+- [k6 캐시 전후 성능 보고서](docs/WEEK5_PERFORMANCE_REPORT.md)
+- [개인 회고](docs/WEEK5_RETROSPECTIVE.md)
+
+## Render 간편 배포
+
+루트의 `render.yaml`을 Blueprint로 연결하면 무료 Web Service가 생성됩니다. 이 배포는
+과제 시연을 위한 H2 인메모리 DB와 캐시 비활성 구성을 사용하므로 MySQL·Redis가 필요하지
+않습니다. 서버가 재시작되면 H2 데이터는 초기화되고 시연용 Todo 65개가 다시 생성됩니다.
+
+배포 후 다음 주소로 확인합니다.
+
+```text
+https://<서비스주소>.onrender.com/actuator/health
+https://<서비스주소>.onrender.com/api/todos
+```
+
 Gradle에는 Web MVC, JPA, Validation, Redis/Cache, Actuator, Lombok, MySQL과 테스트용 H2가 등록되어 있습니다.
 
 ## API 명세

@@ -1,8 +1,60 @@
 services:
+  app:
+    build:
+      context: .
+    image: todomate:local
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/todomate?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      DB_USERNAME: ${DB_USERNAME:-todomate}
+      DB_PASSWORD: ${DB_PASSWORD:-todomate}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      APP_CACHE_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  app-no-cache:
+    build:
+      context: .
+    image: todomate:no-cache
+    profiles: ["benchmark"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/todomate?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      DB_USERNAME: ${DB_USERNAME:-todomate}
+      DB_PASSWORD: ${DB_PASSWORD:-todomate}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      APP_CACHE_ENABLED: "false"
+    ports:
+      - "8081:8080"
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
+
   redis:
     image: redis:7.4-alpine
     ports:
-      - "6379:6379"
+      - "${REDIS_EXPOSED_PORT:-6380}:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -13,13 +65,16 @@ services:
     image: mysql:8.4
     environment:
       MYSQL_DATABASE: todomate
-      MYSQL_USER: todomate
-      MYSQL_PASSWORD: todomate
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
+      MYSQL_USER: ${DB_USERNAME:-todomate}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-todomate}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 3s
       retries: 10
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

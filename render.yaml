@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: todomate-week5-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: APP_CACHE_ENABLED
+        value: "false"

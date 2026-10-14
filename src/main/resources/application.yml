@@ -20,6 +20,13 @@ spring:
     # Spring Cache의 저장소로 Redis를 사용한다.
     type: redis
 
+app:
+  cache:
+    enabled: ${APP_CACHE_ENABLED:true}
+
+server:
+  port: ${PORT:8080}
+
 management:
   endpoints:
     web:

@@ -4,6 +4,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,6 +17,7 @@ import java.time.Duration;
 // @Cacheable과 @CacheEvict 기반의 Spring Cache 기능을 활성화한다.
 @EnableCaching
 @Configuration
+@ConditionalOnProperty(name = "app.cache.enabled", havingValue = "true", matchIfMissing = true)
 public class RedisCacheConfig {
 
     // Redis를 캐시 저장소로 사용하고 만료 시간과 직렬화 방식을 설정한다.

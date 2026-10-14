@@ -8,6 +8,9 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
+  flyway:
+    enabled: true
+    validate-migration-naming: true
 
 server:
   shutdown: graceful

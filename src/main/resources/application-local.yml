@@ -11,3 +11,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  flyway:
+    enabled: false
+
+# 로컬에서 페이징 테스트용 투두 65개를 자동 생성한다. 필요 없으면 false로 변경한다.
+app:
+  seed:
+    enabled: true
